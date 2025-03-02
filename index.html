@@ -7,25 +7,38 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&display=swap');
         
-        body {
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
             margin: 0;
             padding: 0;
             background-color: #171717;
             font-family: 'Archivo Black', sans-serif;
+            overflow: hidden;
+        }
+        
+        .container {
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            gap: 20px;
         }
-        .container {
-            display: flex;
-            gap: 10px;
-        }
+        
         .card {
             background-color: #7e7668;
             border-radius: 12px;
-            width: 140px;
-            height: 180px;
+            flex: 1;
+            height: 80%;
+            max-width: 45%;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -33,29 +46,34 @@
             position: relative;
             overflow: hidden;
         }
+        
         .time {
-            font-size: 70px;
+            font-size: 14vw;
             font-weight: 900;
             color: #171717;
             margin: 0;
             line-height: 1;
-            letter-spacing: -2px;
             font-family: 'Anton', sans-serif;
+            letter-spacing: -0.05em;
         }
+        
         .label {
-            font-size: 14px;
+            font-size: 3vw;
             font-weight: 700;
             color: #171717;
             position: absolute;
-            bottom: 15px;
-            letter-spacing: 1px;
+            bottom: 8%;
+            letter-spacing: 0.05em;
         }
+        
         .left-label {
-            left: 15px;
+            left: 15%;
         }
+        
         .right-label {
-            right: 15px;
+            right: 15%;
         }
+        
         .divider {
             width: 100%;
             height: 1px;
@@ -70,13 +88,13 @@
     <div class="container">
         <div class="card">
             <div class="divider"></div>
-            <h1 id="hour" class="time">00</h1>
+            <h1 id="hours" class="time">00</h1>
             <span class="label left-label" id="ampm">AM</span>
         </div>
         <div class="card">
             <div class="divider"></div>
-            <h1 id="day" class="time">00</h1>
-            <span class="label right-label" id="weekday">MONDAY</span>
+            <h1 id="minutes" class="time">00</h1>
+            <span class="label right-label" id="weekday">SUNDAY</span>
         </div>
     </div>
 
@@ -84,27 +102,39 @@
         function updateTime() {
             const now = new Date();
             
-            // Update hour
+            // Update hours
             let hours = now.getHours();
             const ampm = hours >= 12 ? 'PM' : 'AM';
             hours = hours % 12;
             hours = hours ? hours : 12; // Convert 0 to 12 for 12 AM
             
-            document.getElementById('hour').textContent = hours.toString().padStart(2, '0');
-            document.getElementById('ampm').textContent = ampm;
+            // Update minutes
+            const minutes = now.getMinutes();
             
-            // Update day and weekday
-            const day = now.getDate();
+            // Update weekday
             const weekdays = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
             const weekday = weekdays[now.getDay()];
             
-            document.getElementById('day').textContent = day.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('ampm').textContent = ampm;
             document.getElementById('weekday').textContent = weekday;
         }
 
         // Update time immediately and then every second
         updateTime();
         setInterval(updateTime, 1000);
+        
+        // Responsive sizing
+        window.addEventListener('resize', function() {
+            const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+            document.querySelectorAll('.time').forEach(function(el) {
+                el.style.fontSize = (vw * 0.14) + 'px';
+            });
+            document.querySelectorAll('.label').forEach(function(el) {
+                el.style.fontSize = (vw * 0.03) + 'px';
+            });
+        });
     </script>
 </body>
 </html>
