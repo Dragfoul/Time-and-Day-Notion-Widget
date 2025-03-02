@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Widget</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #171717;
+            font-family: 'Archivo Black', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            display: flex;
+            gap: 10px;
+        }
+        .card {
+            background-color: #7e7668;
+            border-radius: 12px;
+            width: 140px;
+            height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .time {
+            font-size: 70px;
+            font-weight: 900;
+            color: #171717;
+            margin: 0;
+            line-height: 1;
+            letter-spacing: -2px;
+            font-family: 'Anton', sans-serif;
+        }
+        .label {
+            font-size: 14px;
+            font-weight: 700;
+            color: #171717;
+            position: absolute;
+            bottom: 15px;
+            letter-spacing: 1px;
+        }
+        .left-label {
+            left: 15px;
+        }
+        .right-label {
+            right: 15px;
+        }
+        .divider {
+            width: 100%;
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.2);
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="divider"></div>
+            <h1 id="hour" class="time">00</h1>
+            <span class="label left-label" id="ampm">AM</span>
+        </div>
+        <div class="card">
+            <div class="divider"></div>
+            <h1 id="day" class="time">00</h1>
+            <span class="label right-label" id="weekday">MONDAY</span>
+        </div>
+    </div>
+
+    <script>
+        function updateTime() {
+            const now = new Date();
+            
+            // Update hour
+            let hours = now.getHours();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // Convert 0 to 12 for 12 AM
+            
+            document.getElementById('hour').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('ampm').textContent = ampm;
+            
+            // Update day and weekday
+            const day = now.getDate();
+            const weekdays = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+            const weekday = weekdays[now.getDay()];
+            
+            document.getElementById('day').textContent = day.toString().padStart(2, '0');
+            document.getElementById('weekday').textContent = weekday;
+        }
+
+        // Update time immediately and then every second
+        updateTime();
+        setInterval(updateTime, 1000);
+    </script>
+</body>
+</html>
